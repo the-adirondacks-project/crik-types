@@ -22,10 +22,12 @@ description:         Please see the README on Github at <https://github.com/gith
 dependencies:
 - aeson >= 1.0.0.0
 - base >= 4.7 && < 5
+- servant >= 0.13
 - text >= 1.0.0.0
 
 library:
   exposed-modules: 
+  - Crik.API
   - Crik.Types
   - Crik.Types.Video
   - Crik.Types.VideoFile
