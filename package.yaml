@@ -20,7 +20,15 @@ extra-source-files:
 description:         Please see the README on Github at <https://github.com/githubuser/crik-types#readme>
 
 dependencies:
+- aeson >= 1.0.0.0
 - base >= 4.7 && < 5
+- text >= 1.0.0.0
 
 library:
-  exposed-modules: Crik.Types
+  exposed-modules: 
+  - Crik.Types
+  - Crik.Types.Video
+  - Crik.Types.VideoFile
+  - Crik.Types.VideoLibrary
+  other-modules:
+  - Crik.Types.Internal
