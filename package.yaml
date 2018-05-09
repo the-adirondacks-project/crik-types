@@ -23,26 +23,4 @@ dependencies:
 - base >= 4.7 && < 5
 
 library:
-  source-dirs: src
-
-executables:
-  crik-types-exe:
-    main:                Main.hs
-    source-dirs:         app
-    ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
-    dependencies:
-    - crik-types
-
-tests:
-  crik-types-test:
-    main:                Spec.hs
-    source-dirs:         test
-    ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
-    dependencies:
-    - crik-types
+  exposed-modules: Crik.Types
