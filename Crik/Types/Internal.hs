@@ -7,4 +7,4 @@ module Crik.Types.Internal
 
 import GHC.Generics (Generic)
 
-data NoId = NoId deriving (Show, Generic)
+data NoId = NoId deriving (Generic, Show)

@@ -36,7 +36,7 @@ data VideoFile id = VideoFile {
   videoFileUrl :: Text,
   videoLibraryId :: VideoLibraryId,
   videoFileStorageId :: VideoFileStorageId
-} deriving (Generic)
+} deriving (Generic, Show)
 
 instance ToJSON (VideoFile VideoFileId) where
   toJSON VideoFile{..} = object [
