@@ -22,11 +22,11 @@ import Crik.Types.Internal (NoId(NoId))
 import Crik.Types.Video (VideoId)
 import Crik.Types.VideoLibrary (VideoLibraryId)
 
-newtype VideoFileId = VideoFileId { unVideoFileId :: Int } deriving (Generic)
+newtype VideoFileId = VideoFileId { unVideoFileId :: Int } deriving (Generic, Show)
 
 $(deriveJSON defaultOptions{unwrapUnaryRecords=True} ''VideoFileId)
 
-newtype VideoFileStorageId = VideoFileStorageId { unVideoFileStorageId :: Text } deriving (Generic)
+newtype VideoFileStorageId = VideoFileStorageId { unVideoFileStorageId :: Text } deriving (Generic, Show)
 
 $(deriveJSON defaultOptions{unwrapUnaryRecords=True} ''VideoFileStorageId)
 

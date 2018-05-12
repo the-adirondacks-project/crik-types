@@ -19,11 +19,11 @@ import GHC.Generics (Generic)
 
 import Crik.Types.Internal (NoId(NoId))
 
-newtype VideoId = VideoId { unVideoId :: Int } deriving (Show, Generic)
+newtype VideoId = VideoId { unVideoId :: Int } deriving (Generic, Show)
 
 $(deriveJSON defaultOptions{unwrapUnaryRecords=True} ''VideoId)
 
-data Video id = Video { videoId :: id , videoName :: Text } deriving (Show, Generic)
+data Video id = Video { videoId :: id , videoName :: Text } deriving (Generic, Show)
 
 instance ToJSON (Video VideoId) where
   toJSON Video{..} = object [
