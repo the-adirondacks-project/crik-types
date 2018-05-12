@@ -3,9 +3,30 @@
 
 module Crik.API
 (
-  API
+-- Entire API
+  CrikAPI
+-- API Version
+, Version
+-- Video API
 , VideoAPI
-, VideoLibraryAPI
+, GetVideo
+, GetVideos
+, CreateVideo
+, UpdateVideo
+, GetFilesForVideo
+-- Files API
+, FileAPI
+, GetFile
+, GetFiles
+, CreateFile
+-- Library API
+, LibraryAPI
+, GetVideoLibrary
+, GetVideoLibraries
+, GetNewFilesInVideoLibrary
+, GetAllFilesInVideoLibrary
+, CreateVideoLibrary
+, UpdateVideoLibrary
 , GetNewFilesInVideoLibrary
 , GetAllFilesInVideoLibrary
 ) where
@@ -18,52 +39,53 @@ import Crik.Types.Video (Video, VideoId)
 import Crik.Types.VideoFile (VideoFile, VideoFileId)
 import Crik.Types.VideoLibrary (VideoLibrary, VideoLibraryId)
 
-type API = "api" :> (
-    VideoAPI :<|> VideoLibraryAPI
-  )
+type CrikAPI = VideoAPI :<|> FileAPI :<|> LibraryAPI
+type Version = "api"
 
 type VideoAPI =
+  GetVideo :<|>
   GetVideos :<|>
   CreateVideo :<|>
   UpdateVideo :<|>
-  GetVideo :<|>
-  Videos :> CaptureVideoId :> GetFiles :<|>
-  Videos :> CaptureVideoId :> GetFile :<|>
-  GetFiles :<|>
-  GetFile :<|>
-  CreateVideoFile
+  GetFilesForVideo
 
 type Videos = "videos"
 type CaptureVideoId = Capture "videoId" Int
 
-type GetVideos = Videos :> Get '[JSON] [Video VideoId]
-type GetVideo = Videos :> CaptureVideoId :> Get '[JSON] (Video VideoId)
-type CreateVideo = Videos :> ReqBody '[JSON] (Video NoId) :> Post '[JSON] (Video VideoId)
-type UpdateVideo = Videos :> CaptureVideoId :> ReqBody '[JSON] (Video NoId) :> Put '[JSON] (Video VideoId)
+type GetVideo = Version :> Videos :> CaptureVideoId :> Get '[JSON] (Video VideoId)
+type GetVideos = Version :> Videos :> Get '[JSON] [Video VideoId]
+type CreateVideo = Version :> Videos :> ReqBody '[JSON] (Video NoId) :> Post '[JSON] (Video VideoId)
+type UpdateVideo = Version :> Videos :> CaptureVideoId :> ReqBody '[JSON] (Video NoId) :> Put '[JSON] (Video VideoId)
+type GetFilesForVideo = Version :> Videos :> CaptureVideoId :> Get '[JSON] [VideoFile VideoFileId]
+
+type FileAPI =
+  GetFile :<|>
+  GetFiles :<|>
+  CreateFile
 
 type Files = "files"
 type CaptureFileId = Capture "videoFileId" Int
 
-type GetFiles = Files :> Get '[JSON] [VideoFile VideoFileId]
-type GetFile = Files :> CaptureFileId :> Get '[JSON] (VideoFile VideoFileId)
-type CreateVideoFile = Files :> ReqBody '[JSON] (VideoFile NoId) :> Post '[JSON] (VideoFile VideoFileId)
+type GetFile = Version :> Files :> CaptureFileId :> Get '[JSON] (VideoFile VideoFileId)
+type GetFiles = Version :> Files :> Get '[JSON] [VideoFile VideoFileId]
+type CreateFile = Version :> Files :> ReqBody '[JSON] (VideoFile NoId) :> Post '[JSON] (VideoFile VideoFileId)
 
-type VideoLibraryAPI =
-  GetVideoLibraries :<|>
+type LibraryAPI =
   GetVideoLibrary :<|>
-  GetNewFilesInVideoLibrary :<|>
-  GetAllFilesInVideoLibrary :<|>
+  GetVideoLibraries :<|>
   CreateVideoLibrary :<|>
-  UpdateVideoLibrary
+  UpdateVideoLibrary :<|>
+  GetNewFilesInVideoLibrary :<|>
+  GetAllFilesInVideoLibrary
 
 type VideoLibraries = "video_libraries"
 type CaptureVideoLibraryId = Capture "videoLibraryId" Int
 
-type GetVideoLibraries = VideoLibraries :> Get '[JSON] [VideoLibrary VideoLibraryId]
-type GetVideoLibrary = VideoLibraries :> CaptureVideoLibraryId :> Get '[JSON] (VideoLibrary VideoLibraryId)
-type GetNewFilesInVideoLibrary = VideoLibraries :> CaptureVideoLibraryId :> "new_files" :> Get '[JSON] [Text]
-type GetAllFilesInVideoLibrary = VideoLibraries :> CaptureVideoLibraryId :> "all_files" :> Get '[JSON] [Text]
-type CreateVideoLibrary = VideoLibraries :> ReqBody '[JSON] (VideoLibrary NoId) :>
+type GetVideoLibrary = Version :> VideoLibraries :> CaptureVideoLibraryId :> Get '[JSON] (VideoLibrary VideoLibraryId)
+type GetVideoLibraries = Version :> VideoLibraries :> Get '[JSON] [VideoLibrary VideoLibraryId]
+type CreateVideoLibrary = Version :> VideoLibraries :> ReqBody '[JSON] (VideoLibrary NoId) :>
   Post '[JSON] (VideoLibrary VideoLibraryId)
-type UpdateVideoLibrary = VideoLibraries :> CaptureVideoLibraryId :> ReqBody '[JSON] (VideoLibrary NoId) :>
+type UpdateVideoLibrary = Version :> VideoLibraries :> CaptureVideoLibraryId :> ReqBody '[JSON] (VideoLibrary NoId) :>
   Put '[JSON] (VideoLibrary VideoLibraryId)
+type GetNewFilesInVideoLibrary = Version :> VideoLibraries :> CaptureVideoLibraryId :> "new_files" :> Get '[JSON] [Text]
+type GetAllFilesInVideoLibrary = Version :> VideoLibraries :> CaptureVideoLibraryId :> "all_files" :> Get '[JSON] [Text]

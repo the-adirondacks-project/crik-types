@@ -68,6 +68,16 @@ instance ToJSON (VideoFile NoId) where
       "storageId" .= videoFileStorageId
     )
 
+instance FromJSON (VideoFile VideoFileId) where
+  parseJSON (Object v) = do
+    id <- v .: "id"
+    videoId <- v .: "videoId"
+    url <- v .: "url"
+    libraryId <- v .: "libraryId"
+    storageId <- v .: "storageId"
+    return (VideoFile id videoId url libraryId storageId)
+  parseJSON invalid = typeMismatch "VideoFile" invalid
+
 instance FromJSON (VideoFile NoId) where
   parseJSON (Object v) = do
     videoId <- v .: "videoId"

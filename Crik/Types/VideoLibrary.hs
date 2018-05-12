@@ -26,6 +26,10 @@ $(deriveJSON defaultOptions{unwrapUnaryRecords=True} ''VideoLibraryId)
 
 data VideoLibrary id = VideoLibrary { videoLibraryId :: id, videoLibraryUrl :: Text } deriving (Generic)
 
+instance ToJSON (VideoLibrary NoId) where
+  toJSON VideoLibrary{..} = object ["url" .= videoLibraryUrl]
+  toEncoding VideoLibrary{..} = pairs ("url" .= videoLibraryUrl)
+
 instance ToJSON (VideoLibrary VideoLibraryId) where
   toJSON VideoLibrary{..} = object ["id" .= videoLibraryId, "url" .= videoLibraryUrl]
   toEncoding VideoLibrary{..} = pairs ("id" .= videoLibraryId <> "url" .= videoLibraryUrl)
