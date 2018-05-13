@@ -1,6 +1,6 @@
 module Crik.Types
 (
-  NoId
+  NoId(..)
 ) where
 
 import Crik.Types.Internal
