@@ -43,6 +43,12 @@ instance ToJSON (Video NoId) where
       "name" .= videoName
     )
 
+instance ToJSON (Video (Maybe VideoId)) where
+  toJSON (Video Nothing videoName) = toJSON (Video NoId videoName)
+  toJSON (Video (Just videoId) videoName) = toJSON (Video videoId videoName)
+  toEncoding (Video Nothing videoName) = toEncoding (Video NoId videoName)
+  toEncoding (Video (Just videoId) videoName) = toEncoding (Video videoId videoName)
+
 instance FromJSON (Video VideoId) where
   parseJSON (Object v) = do
     id <- v .: "id"
