@@ -23,8 +23,6 @@ module Crik.API
 , LibraryAPI
 , GetVideoLibrary
 , GetVideoLibraries
-, GetNewFilesInVideoLibrary
-, GetAllFilesInVideoLibrary
 , CreateVideoLibrary
 , UpdateVideoLibrary
 , GetNewFilesInVideoLibrary
