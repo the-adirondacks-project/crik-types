@@ -48,7 +48,7 @@ type VideoAPI =
   GetFilesForVideo
 
 type Videos = "videos"
-type CaptureVideoId = Capture "videoId" Int
+type CaptureVideoId = Capture "videoId" VideoId
 
 type GetVideo = Version :> Videos :> CaptureVideoId :> Get '[JSON] (Video VideoId)
 type GetVideos = Version :> Videos :> Get '[JSON] [Video VideoId]
@@ -63,7 +63,7 @@ type FileAPI =
   CreateFile
 
 type Files = "files"
-type CaptureFileId = Capture "videoFileId" Int
+type CaptureFileId = Capture "videoFileId" VideoFileId
 
 type GetFile = Version :> Files :> CaptureFileId :> Get '[JSON] (VideoFile VideoFileId)
 type GetFiles = Version :> Files :> Get '[JSON] [VideoFile VideoFileId]
@@ -78,7 +78,7 @@ type LibraryAPI =
   GetAllFilesInVideoLibrary
 
 type VideoLibraries = "video_libraries"
-type CaptureVideoLibraryId = Capture "videoLibraryId" Int
+type CaptureVideoLibraryId = Capture "videoLibraryId" VideoLibraryId
 
 type GetVideoLibrary = Version :> VideoLibraries :> CaptureVideoLibraryId :> Get '[JSON] (VideoLibrary VideoLibraryId)
 type GetVideoLibraries = Version :> VideoLibraries :> Get '[JSON] [VideoLibrary VideoLibraryId]
