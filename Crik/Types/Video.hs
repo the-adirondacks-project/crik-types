@@ -49,6 +49,13 @@ instance ToJSON (Video (Maybe VideoId)) where
   toEncoding (Video Nothing videoName) = toEncoding (Video NoId videoName)
   toEncoding (Video (Just videoId) videoName) = toEncoding (Video videoId videoName)
 
+instance FromJSON (Video (Maybe VideoId)) where
+  parseJSON (Object v) = do
+    name <- v .: "name"
+    -- TODO: Revisit this decision
+    return (Video Nothing name)
+  parseJSON invalid = typeMismatch "Video" invalid
+
 instance FromJSON (Video VideoId) where
   parseJSON (Object v) = do
     id <- v .: "id"
