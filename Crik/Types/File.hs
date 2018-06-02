@@ -25,9 +25,9 @@ import Crik.Types.Library (LibraryId)
 data File id = File {
   fileId :: id,
   videoId :: VideoId,
-  videoFileUrl :: Text,
+  fileUrl :: Text,
   libraryId :: LibraryId,
-  videoFileStorageId :: FileStorageId
+  fileStorageId :: FileStorageId
 } deriving (Generic, Show)
 
 -- From JSON instances
@@ -35,30 +35,30 @@ instance ToJSON (File FileId) where
   toJSON File{..} = object [
       "id" .= fileId,
       "videoId" .= videoId,
-      "url" .= videoFileUrl,
+      "url" .= fileUrl,
       "libraryId" .= libraryId,
-      "storageId" .= videoFileStorageId
+      "storageId" .= fileStorageId
     ]
   toEncoding File{..} = pairs (
       "id" .= fileId <>
       "videoId" .= videoId <>
-      "url" .= videoFileUrl <>
+      "url" .= fileUrl <>
       "libraryId" .= libraryId <>
-      "storageId" .= videoFileStorageId
+      "storageId" .= fileStorageId
     )
 
 instance ToJSON (File NoId) where
   toJSON File{..} = object [
       "videoId" .= videoId,
-      "url" .= videoFileUrl,
+      "url" .= fileUrl,
       "libraryId" .= libraryId,
-      "storageId" .= videoFileStorageId
+      "storageId" .= fileStorageId
     ]
   toEncoding File{..} = pairs (
       "videoId" .= videoId <>
-      "url" .= videoFileUrl <>
+      "url" .= fileUrl <>
       "libraryId" .= libraryId <>
-      "storageId" .= videoFileStorageId
+      "storageId" .= fileStorageId
     )
 
 -- From JSON instances
