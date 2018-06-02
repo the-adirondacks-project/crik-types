@@ -21,7 +21,7 @@ import GHC.Generics (Generic)
 import Crik.TH.DeriveHttpData
 import Crik.Types.Internal (NoId(NoId))
 import Crik.Types.Video (VideoId)
-import Crik.Types.VideoLibrary (VideoLibraryId)
+import Crik.Types.Library (LibraryId)
 
 newtype FileId = FileId { unFileId :: Int } deriving (Generic, Show)
 
@@ -36,7 +36,7 @@ data File id = File {
   fileId :: id,
   videoId :: VideoId,
   videoFileUrl :: Text,
-  videoLibraryId :: VideoLibraryId,
+  libraryId :: LibraryId,
   videoFileStorageId :: FileStorageId
 } deriving (Generic, Show)
 
@@ -45,14 +45,14 @@ instance ToJSON (File FileId) where
       "id" .= fileId,
       "videoId" .= videoId,
       "url" .= videoFileUrl,
-      "libraryId" .= videoLibraryId,
+      "libraryId" .= libraryId,
       "storageId" .= videoFileStorageId
     ]
   toEncoding File{..} = pairs (
       "id" .= fileId <>
       "videoId" .= videoId <>
       "url" .= videoFileUrl <>
-      "libraryId" .= videoLibraryId <>
+      "libraryId" .= libraryId <>
       "storageId" .= videoFileStorageId
     )
 
@@ -60,13 +60,13 @@ instance ToJSON (File NoId) where
   toJSON File{..} = object [
       "videoId" .= videoId,
       "url" .= videoFileUrl,
-      "libraryId" .= videoLibraryId,
+      "libraryId" .= libraryId,
       "storageId" .= videoFileStorageId
     ]
   toEncoding File{..} = pairs (
       "videoId" .= videoId <>
       "url" .= videoFileUrl <>
-      "libraryId" .= videoLibraryId <>
+      "libraryId" .= libraryId <>
       "storageId" .= videoFileStorageId
     )
 

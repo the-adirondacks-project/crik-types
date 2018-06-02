@@ -4,10 +4,10 @@
 {-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE TemplateHaskell #-}
 
-module Crik.Types.VideoLibrary
+module Crik.Types.Library
 (
-  VideoLibraryId(..)
-, VideoLibrary(..)
+  LibraryId(..)
+, Library(..)
 ) where
 
 import Data.Aeson (FromJSON(parseJSON), Value(Object), ToJSON(toJSON, toEncoding), (.=), (.:), object, pairs)
@@ -21,28 +21,28 @@ import Crik.TH.DeriveHttpData
 import Crik.Types.Internal (NoId(NoId))
 import Crik.Types.Video (VideoId)
 
-newtype VideoLibraryId = VideoLibraryId { unVideoLibraryId :: Int } deriving (Generic, Show)
+newtype LibraryId = LibraryId { unVideoLibraryId :: Int } deriving (Generic, Show)
 
-$(deriveJSON defaultOptions{unwrapUnaryRecords=True} ''VideoLibraryId)
-deriveFromHttpData ''VideoLibraryId
+$(deriveJSON defaultOptions{unwrapUnaryRecords=True} ''LibraryId)
+deriveFromHttpData ''LibraryId
 
-data VideoLibrary id = VideoLibrary { videoLibraryId :: id, videoLibraryUrl :: Text } deriving (Generic, Show)
+data Library id = Library { libraryId :: id, videoLibraryUrl :: Text } deriving (Generic, Show)
 
-instance ToJSON (VideoLibrary NoId) where
-  toJSON VideoLibrary{..} = object ["url" .= videoLibraryUrl]
-  toEncoding VideoLibrary{..} = pairs ("url" .= videoLibraryUrl)
+instance ToJSON (Library NoId) where
+  toJSON Library{..} = object ["url" .= videoLibraryUrl]
+  toEncoding Library{..} = pairs ("url" .= videoLibraryUrl)
 
-instance ToJSON (VideoLibrary VideoLibraryId) where
-  toJSON VideoLibrary{..} = object ["id" .= videoLibraryId, "url" .= videoLibraryUrl]
-  toEncoding VideoLibrary{..} = pairs ("id" .= videoLibraryId <> "url" .= videoLibraryUrl)
+instance ToJSON (Library LibraryId) where
+  toJSON Library{..} = object ["id" .= libraryId, "url" .= videoLibraryUrl]
+  toEncoding Library{..} = pairs ("id" .= libraryId <> "url" .= videoLibraryUrl)
 
-instance FromJSON (VideoLibrary VideoLibraryId) where
+instance FromJSON (Library LibraryId) where
   parseJSON (Object v) = do
     id <- v .: "id"
     url <- v .: "url"
-    return (VideoLibrary (VideoLibraryId id) url)
-  parseJSON invalid = typeMismatch "VideoLibrary" invalid
+    return (Library (LibraryId id) url)
+  parseJSON invalid = typeMismatch "Library" invalid
 
-instance FromJSON (VideoLibrary NoId) where
-  parseJSON (Object v) = VideoLibrary NoId <$> v .: "url"
-  parseJSON invalid = typeMismatch "VideoLibrary" invalid
+instance FromJSON (Library NoId) where
+  parseJSON (Object v) = Library NoId <$> v .: "url"
+  parseJSON invalid = typeMismatch "Library" invalid
