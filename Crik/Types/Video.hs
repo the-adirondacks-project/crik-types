@@ -17,11 +17,13 @@ import Data.Semigroup (Semigroup ((<>)))
 import Data.Text (Text)
 import GHC.Generics (Generic)
 
+import Crik.TH.DeriveHttpData
 import Crik.Types.Internal (NoId(NoId))
 
 newtype VideoId = VideoId { unVideoId :: Int } deriving (Generic, Show)
 
 $(deriveJSON defaultOptions{unwrapUnaryRecords=True} ''VideoId)
+deriveFromHttpData ''VideoId
 
 data Video id = Video { videoId :: id , videoName :: Text } deriving (Generic, Show)
 

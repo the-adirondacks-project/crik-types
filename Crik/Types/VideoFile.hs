@@ -18,6 +18,7 @@ import Data.Semigroup (Semigroup ((<>)))
 import Data.Text (Text)
 import GHC.Generics (Generic)
 
+import Crik.TH.DeriveHttpData
 import Crik.Types.Internal (NoId(NoId))
 import Crik.Types.Video (VideoId)
 import Crik.Types.VideoLibrary (VideoLibraryId)
@@ -25,6 +26,7 @@ import Crik.Types.VideoLibrary (VideoLibraryId)
 newtype VideoFileId = VideoFileId { unVideoFileId :: Int } deriving (Generic, Show)
 
 $(deriveJSON defaultOptions{unwrapUnaryRecords=True} ''VideoFileId)
+deriveFromHttpData ''VideoFileId
 
 newtype VideoFileStorageId = VideoFileStorageId { unVideoFileStorageId :: Text } deriving (Generic, Show)
 

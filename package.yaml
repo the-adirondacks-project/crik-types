@@ -24,6 +24,7 @@ dependencies:
 - base >= 4.7 && < 5
 - servant >= 0.13
 - text >= 1.0.0.0
+- template-haskell >= 2.0 && <= 3.0
 
 library:
   exposed-modules: 
@@ -33,4 +34,5 @@ library:
   - Crik.Types.VideoFile
   - Crik.Types.VideoLibrary
   other-modules:
+  - Crik.TH.DeriveHttpData
   - Crik.Types.Internal
