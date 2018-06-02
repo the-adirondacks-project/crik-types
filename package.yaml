@@ -35,6 +35,7 @@ library:
   - Crik.Types.File
   - Crik.Types.File.Id
   - Crik.Types.Library
+  - Crik.Types.Library.Id
   other-modules:
   - Crik.TH.DeriveHttpData
   - Crik.Types.Internal
