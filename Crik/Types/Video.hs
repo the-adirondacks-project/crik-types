@@ -17,16 +17,12 @@ import Data.Semigroup (Semigroup ((<>)))
 import Data.Text (Text)
 import GHC.Generics (Generic)
 
-import Crik.TH.DeriveHttpData
-import Crik.Types.Internal (NoId(NoId))
-
-newtype VideoId = VideoId { unVideoId :: Int } deriving (Generic, Show)
-
-$(deriveJSON defaultOptions{unwrapUnaryRecords=True} ''VideoId)
-deriveFromHttpData ''VideoId
+import Crik.Types.Internal
+import Crik.Types.Video.Id
 
 data Video id = Video { videoId :: id , videoName :: Text } deriving (Generic, Show)
 
+-- To JSON instances
 instance ToJSON (Video VideoId) where
   toJSON Video{..} = object [
       "id" .= videoId,
@@ -51,11 +47,12 @@ instance ToJSON (Video (Maybe VideoId)) where
   toEncoding (Video Nothing videoName) = toEncoding (Video NoId videoName)
   toEncoding (Video (Just videoId) videoName) = toEncoding (Video videoId videoName)
 
+-- From JSON instances
 instance FromJSON (Video (Maybe VideoId)) where
   parseJSON (Object v) = do
+    id <- v .: "id"
     name <- v .: "name"
-    -- TODO: Revisit this decision
-    return (Video Nothing name)
+    return (Video id name)
   parseJSON invalid = typeMismatch "Video" invalid
 
 instance FromJSON (Video VideoId) where
