@@ -21,16 +21,19 @@ import Crik.Types.Internal (NoId(NoId))
 import Crik.Types.Library.Id
 import Crik.Types.Video (VideoId)
 
-data Library id = Library { libraryId :: id, videoLibraryUrl :: Text } deriving (Generic, Show)
+data Library id = Library {
+  libraryId :: id,
+  libraryUrl :: Text
+} deriving (Generic, Show)
 
 -- To JSON instances
 instance ToJSON (Library NoId) where
-  toJSON Library{..} = object ["url" .= videoLibraryUrl]
-  toEncoding Library{..} = pairs ("url" .= videoLibraryUrl)
+  toJSON Library{..} = object ["url" .= libraryUrl]
+  toEncoding Library{..} = pairs ("url" .= libraryUrl)
 
 instance ToJSON (Library LibraryId) where
-  toJSON Library{..} = object ["id" .= libraryId, "url" .= videoLibraryUrl]
-  toEncoding Library{..} = pairs ("id" .= libraryId <> "url" .= videoLibraryUrl)
+  toJSON Library{..} = object ["id" .= libraryId, "url" .= libraryUrl]
+  toEncoding Library{..} = pairs ("id" .= libraryId <> "url" .= libraryUrl)
 
 -- From JSON instances
 instance FromJSON (Library LibraryId) where
