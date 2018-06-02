@@ -33,6 +33,7 @@ library:
   - Crik.Types.Video
   - Crik.Types.Video.Id
   - Crik.Types.File
+  - Crik.Types.File.Id
   - Crik.Types.Library
   other-modules:
   - Crik.TH.DeriveHttpData

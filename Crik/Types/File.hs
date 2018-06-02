@@ -12,25 +12,15 @@ module Crik.Types.File
 ) where
 
 import Data.Aeson (ToJSON(toJSON, toEncoding), FromJSON(parseJSON), (.=), object, pairs)
-import Data.Aeson.TH (deriveJSON, defaultOptions, unwrapUnaryRecords, fieldLabelModifier)
 import Data.Aeson.Types
 import Data.Semigroup (Semigroup ((<>)))
 import Data.Text (Text)
 import GHC.Generics (Generic)
 
-import Crik.TH.DeriveHttpData
+import Crik.Types.File.Id
 import Crik.Types.Internal (NoId(NoId))
 import Crik.Types.Video (VideoId)
 import Crik.Types.Library (LibraryId)
-
-newtype FileId = FileId { unFileId :: Int } deriving (Generic, Show)
-
-$(deriveJSON defaultOptions{unwrapUnaryRecords=True} ''FileId)
-deriveFromHttpData ''FileId
-
-newtype FileStorageId = FileStorageId { unFileStorageId :: Text } deriving (Generic, Show)
-
-$(deriveJSON defaultOptions{unwrapUnaryRecords=True} ''FileStorageId)
 
 data File id = File {
   fileId :: id,
@@ -40,6 +30,7 @@ data File id = File {
   videoFileStorageId :: FileStorageId
 } deriving (Generic, Show)
 
+-- From JSON instances
 instance ToJSON (File FileId) where
   toJSON File{..} = object [
       "id" .= fileId,
@@ -70,6 +61,7 @@ instance ToJSON (File NoId) where
       "storageId" .= videoFileStorageId
     )
 
+-- From JSON instances
 instance FromJSON (File FileId) where
   parseJSON (Object v) = do
     id <- v .: "id"
