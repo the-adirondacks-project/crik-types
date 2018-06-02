@@ -4,11 +4,11 @@
 {-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE TemplateHaskell #-}
 
-module Crik.Types.VideoFile
+module Crik.Types.File
 (
-  VideoFile(..)
-, VideoFileId(..)
-, VideoFileStorageId(..)
+  File(..)
+, FileId(..)
+, FileStorageId(..)
 ) where
 
 import Data.Aeson (ToJSON(toJSON, toEncoding), FromJSON(parseJSON), (.=), object, pairs)
@@ -23,68 +23,68 @@ import Crik.Types.Internal (NoId(NoId))
 import Crik.Types.Video (VideoId)
 import Crik.Types.VideoLibrary (VideoLibraryId)
 
-newtype VideoFileId = VideoFileId { unVideoFileId :: Int } deriving (Generic, Show)
+newtype FileId = FileId { unFileId :: Int } deriving (Generic, Show)
 
-$(deriveJSON defaultOptions{unwrapUnaryRecords=True} ''VideoFileId)
-deriveFromHttpData ''VideoFileId
+$(deriveJSON defaultOptions{unwrapUnaryRecords=True} ''FileId)
+deriveFromHttpData ''FileId
 
-newtype VideoFileStorageId = VideoFileStorageId { unVideoFileStorageId :: Text } deriving (Generic, Show)
+newtype FileStorageId = FileStorageId { unFileStorageId :: Text } deriving (Generic, Show)
 
-$(deriveJSON defaultOptions{unwrapUnaryRecords=True} ''VideoFileStorageId)
+$(deriveJSON defaultOptions{unwrapUnaryRecords=True} ''FileStorageId)
 
-data VideoFile id = VideoFile {
-  videoFileId :: id,
+data File id = File {
+  fileId :: id,
   videoId :: VideoId,
   videoFileUrl :: Text,
   videoLibraryId :: VideoLibraryId,
-  videoFileStorageId :: VideoFileStorageId
+  videoFileStorageId :: FileStorageId
 } deriving (Generic, Show)
 
-instance ToJSON (VideoFile VideoFileId) where
-  toJSON VideoFile{..} = object [
-      "id" .= videoFileId,
+instance ToJSON (File FileId) where
+  toJSON File{..} = object [
+      "id" .= fileId,
       "videoId" .= videoId,
       "url" .= videoFileUrl,
       "libraryId" .= videoLibraryId,
       "storageId" .= videoFileStorageId
     ]
-  toEncoding VideoFile{..} = pairs (
-      "id" .= videoFileId <>
+  toEncoding File{..} = pairs (
+      "id" .= fileId <>
       "videoId" .= videoId <>
       "url" .= videoFileUrl <>
       "libraryId" .= videoLibraryId <>
       "storageId" .= videoFileStorageId
     )
 
-instance ToJSON (VideoFile NoId) where
-  toJSON VideoFile{..} = object [
+instance ToJSON (File NoId) where
+  toJSON File{..} = object [
       "videoId" .= videoId,
       "url" .= videoFileUrl,
       "libraryId" .= videoLibraryId,
       "storageId" .= videoFileStorageId
     ]
-  toEncoding VideoFile{..} = pairs (
+  toEncoding File{..} = pairs (
       "videoId" .= videoId <>
       "url" .= videoFileUrl <>
       "libraryId" .= videoLibraryId <>
       "storageId" .= videoFileStorageId
     )
 
-instance FromJSON (VideoFile VideoFileId) where
+instance FromJSON (File FileId) where
   parseJSON (Object v) = do
     id <- v .: "id"
     videoId <- v .: "videoId"
     url <- v .: "url"
     libraryId <- v .: "libraryId"
     storageId <- v .: "storageId"
-    return (VideoFile id videoId url libraryId storageId)
-  parseJSON invalid = typeMismatch "VideoFile" invalid
+    return (File id videoId url libraryId storageId)
+  parseJSON invalid = typeMismatch "File" invalid
 
-instance FromJSON (VideoFile NoId) where
+instance FromJSON (File NoId) where
   parseJSON (Object v) = do
     videoId <- v .: "videoId"
     url <- v .: "url"
     libraryId <- v .: "libraryId"
     storageId <- v .: "storageId"
-    return (VideoFile NoId videoId url libraryId storageId)
-  parseJSON invalid = typeMismatch "VideoFile" invalid
+    return (File NoId videoId url libraryId storageId)
+  parseJSON invalid = typeMismatch "File" invalid
