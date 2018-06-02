@@ -34,8 +34,8 @@ import Servant.API (Capture, Get, JSON, Post, Put, ReqBody, (:>), (:<|>)((:<|>))
 
 import Crik.Types.Internal (NoId)
 import Crik.Types.Video (Video, VideoId)
-import Crik.Types.VideoFile (VideoFile, VideoFileId)
-import Crik.Types.VideoLibrary (VideoLibrary, VideoLibraryId)
+import Crik.Types.File (File, FileId)
+import Crik.Types.Library (Library, LibraryId)
 
 type CrikAPI = VideoAPI :<|> FileAPI :<|> LibraryAPI
 type Version = "api"
@@ -55,7 +55,7 @@ type GetVideos = Version :> Videos :> Get '[JSON] [Video VideoId]
 type CreateVideo = Version :> Videos :> ReqBody '[JSON] (Video NoId) :> Post '[JSON] (Video VideoId)
 type UpdateVideo = Version :> Videos :> CaptureVideoId :> ReqBody '[JSON] (Video (Maybe VideoId))
   :> Put '[JSON] (Video VideoId)
-type GetFilesForVideo = Version :> Videos :> CaptureVideoId :> Get '[JSON] [VideoFile VideoFileId]
+type GetFilesForVideo = Version :> Videos :> CaptureVideoId :> Get '[JSON] [File FileId]
 
 type FileAPI =
   GetFile :<|>
@@ -63,11 +63,11 @@ type FileAPI =
   CreateFile
 
 type Files = "files"
-type CaptureFileId = Capture "videoFileId" VideoFileId
+type CaptureFileId = Capture "videoFileId" FileId
 
-type GetFile = Version :> Files :> CaptureFileId :> Get '[JSON] (VideoFile VideoFileId)
-type GetFiles = Version :> Files :> Get '[JSON] [VideoFile VideoFileId]
-type CreateFile = Version :> Files :> ReqBody '[JSON] (VideoFile NoId) :> Post '[JSON] (VideoFile VideoFileId)
+type GetFile = Version :> Files :> CaptureFileId :> Get '[JSON] (File FileId)
+type GetFiles = Version :> Files :> Get '[JSON] [File FileId]
+type CreateFile = Version :> Files :> ReqBody '[JSON] (File NoId) :> Post '[JSON] (File FileId)
 
 type LibraryAPI =
   GetVideoLibrary :<|>
@@ -78,13 +78,13 @@ type LibraryAPI =
   GetAllFilesInVideoLibrary
 
 type VideoLibraries = "video_libraries"
-type CaptureVideoLibraryId = Capture "videoLibraryId" VideoLibraryId
+type CaptureVideoLibraryId = Capture "LibraryId" LibraryId
 
-type GetVideoLibrary = Version :> VideoLibraries :> CaptureVideoLibraryId :> Get '[JSON] (VideoLibrary VideoLibraryId)
-type GetVideoLibraries = Version :> VideoLibraries :> Get '[JSON] [VideoLibrary VideoLibraryId]
-type CreateVideoLibrary = Version :> VideoLibraries :> ReqBody '[JSON] (VideoLibrary NoId) :>
-  Post '[JSON] (VideoLibrary VideoLibraryId)
-type UpdateVideoLibrary = Version :> VideoLibraries :> CaptureVideoLibraryId :> ReqBody '[JSON] (VideoLibrary NoId) :>
-  Put '[JSON] (VideoLibrary VideoLibraryId)
+type GetVideoLibrary = Version :> VideoLibraries :> CaptureVideoLibraryId :> Get '[JSON] (Library LibraryId)
+type GetVideoLibraries = Version :> VideoLibraries :> Get '[JSON] [Library LibraryId]
+type CreateVideoLibrary = Version :> VideoLibraries :> ReqBody '[JSON] (Library NoId) :>
+  Post '[JSON] (Library LibraryId)
+type UpdateVideoLibrary = Version :> VideoLibraries :> CaptureVideoLibraryId :> ReqBody '[JSON] (Library NoId) :>
+  Put '[JSON] (Library LibraryId)
 type GetNewFilesInVideoLibrary = Version :> VideoLibraries :> CaptureVideoLibraryId :> "new_files" :> Get '[JSON] [Text]
 type GetAllFilesInVideoLibrary = Version :> VideoLibraries :> CaptureVideoLibraryId :> "all_files" :> Get '[JSON] [Text]
