@@ -21,12 +21,12 @@ module Crik.API
 , CreateFile
 -- Library API
 , LibraryAPI
-, GetVideoLibrary
-, GetVideoLibraries
-, CreateVideoLibrary
-, UpdateVideoLibrary
-, GetNewFilesInVideoLibrary
-, GetAllFilesInVideoLibrary
+, GetLibrary
+, GetLibraries
+, CreateLibrary
+, UpdateLibrary
+, GetNewFilesInLibrary
+, GetAllFilesInLibrary
 ) where
 
 import Data.Text (Text)
@@ -70,24 +70,23 @@ type GetFiles = Version :> Files :> Get '[JSON] [File FileId]
 type CreateFile = Version :> Files :> ReqBody '[JSON] (File NoId) :> Post '[JSON] (File FileId)
 
 type LibraryAPI =
-  GetVideoLibrary :<|>
-  GetVideoLibraries :<|>
-  CreateVideoLibrary :<|>
-  UpdateVideoLibrary :<|>
-  GetNewFilesInVideoLibrary :<|>
-  GetAllFilesInVideoLibrary
+  GetLibrary :<|>
+  GetLibraries :<|>
+  CreateLibrary :<|>
+  UpdateLibrary :<|>
+  GetNewFilesInLibrary :<|>
+  GetAllFilesInLibrary
 
-type VideoLibraries = "video_libraries"
-type CaptureVideoLibraryId = Capture "LibraryId" LibraryId
+type Libraries = "libraries"
+type CaptureLibraryId = Capture "LibraryId" LibraryId
 
-type GetVideoLibrary = Version :> VideoLibraries :> CaptureVideoLibraryId
-  :> Get '[JSON] (Library LibraryId)
-type GetVideoLibraries = Version :> VideoLibraries :> Get '[JSON] [Library LibraryId]
-type CreateVideoLibrary = Version :> VideoLibraries :> ReqBody '[JSON] (Library NoId) :>
+type GetLibrary = Version :> Libraries :> CaptureLibraryId :> Get '[JSON] (Library LibraryId)
+type GetLibraries = Version :> Libraries :> Get '[JSON] [Library LibraryId]
+type CreateLibrary = Version :> Libraries :> ReqBody '[JSON] (Library NoId) :>
   Post '[JSON] (Library LibraryId)
-type UpdateVideoLibrary = Version :> VideoLibraries :> CaptureVideoLibraryId :>
+type UpdateLibrary = Version :> Libraries :> CaptureLibraryId :>
   ReqBody '[JSON] (Library NoId) :> Put '[JSON] (Library LibraryId)
-type GetNewFilesInVideoLibrary = Version :> VideoLibraries :> CaptureVideoLibraryId :> "new_files"
+type GetNewFilesInLibrary = Version :> Libraries :> CaptureLibraryId :> "new_files"
   :> Get '[JSON] [Text]
-type GetAllFilesInVideoLibrary = Version :> VideoLibraries :> CaptureVideoLibraryId :> "all_files"
+type GetAllFilesInLibrary = Version :> Libraries :> CaptureLibraryId :> "all_files"
   :> Get '[JSON] [Text]
