@@ -11,7 +11,7 @@ import GHC.Generics (Generic)
 
 import Crik.TH.DeriveHttpData
 
-newtype LibraryId = LibraryId { unVideoLibraryId :: Int } deriving (Generic, Show)
+newtype LibraryId = LibraryId { unLibraryId :: Int } deriving (Generic, Show)
 
 $(deriveJSON defaultOptions{unwrapUnaryRecords=True} ''LibraryId)
 deriveFromHttpData ''LibraryId
