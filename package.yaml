@@ -34,6 +34,7 @@ library:
   - Crik.Types.Video.Id
   - Crik.Types.File
   - Crik.Types.File.Id
+  - Crik.Types.FilePath
   - Crik.Types.Library
   - Crik.Types.Library.Id
   other-modules:

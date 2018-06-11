@@ -25,16 +25,19 @@ module Crik.API
 , GetLibraries
 , CreateLibrary
 , UpdateLibrary
+-- Library Raw Files API
+, LibraryRawFilesAPI
 , GetNewFilesInLibrary
 , GetAllFilesInLibrary
+, GetRawFile
 ) where
 
 import Data.Text (Text)
-import Servant.API (Capture, Get, JSON, Post, Put, ReqBody, (:>), (:<|>)((:<|>)))
+import Servant.API (Capture, Get, JSON, Post, Put, Raw, ReqBody, (:>), (:<|>)((:<|>)))
 
 import Crik.Types.Internal (NoId)
 import Crik.Types.Video (Video, VideoId)
-import Crik.Types.File (File, FileId)
+import Crik.Types.File
 import Crik.Types.Library (Library, LibraryId)
 
 type CrikAPI = VideoAPI :<|> FileAPI :<|> LibraryAPI
@@ -77,8 +80,15 @@ type LibraryAPI =
   GetNewFilesInLibrary :<|>
   GetAllFilesInLibrary
 
+type LibraryRawFilesAPI =
+  GetNewFilesInLibrary :<|>
+  GetAllFilesInLibrary :<|>
+  GetRawFile
+
 type Libraries = "libraries"
 type CaptureLibraryId = Capture "LibraryId" LibraryId
+-- Unused right now but I'd like to use it instead of `Raw` later
+type CaptureFileStorageId = Capture "FileStorageId" FileStorageId
 
 type GetLibrary = Version :> Libraries :> CaptureLibraryId :> Get '[JSON] (Library LibraryId)
 type GetLibraries = Version :> Libraries :> Get '[JSON] [Library LibraryId]
@@ -86,6 +96,8 @@ type CreateLibrary = Version :> Libraries :> ReqBody '[JSON] (Library NoId) :>
   Post '[JSON] (Library LibraryId)
 type UpdateLibrary = Version :> Libraries :> CaptureLibraryId :>
   ReqBody '[JSON] (Library NoId) :> Put '[JSON] (Library LibraryId)
+
+type GetRawFile = Version :> Libraries :> CaptureLibraryId :> "raw_files" :> Raw
 type GetNewFilesInLibrary = Version :> Libraries :> CaptureLibraryId :> "new_files"
   :> Get '[JSON] [Text]
 type GetAllFilesInLibrary = Version :> Libraries :> CaptureLibraryId :> "all_files"

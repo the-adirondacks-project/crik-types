@@ -21,3 +21,4 @@ deriveFromHttpData ''FileId
 newtype FileStorageId = FileStorageId { unFileStorageId :: Text } deriving (Generic, Show)
 
 $(deriveJSON defaultOptions{unwrapUnaryRecords=True} ''FileStorageId)
+deriveFromHttpData ''FileStorageId
