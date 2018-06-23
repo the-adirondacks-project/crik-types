@@ -74,6 +74,7 @@ type CreateFile = Version :> Files :> ReqBody '[JSON] (File NoId) :> Post '[JSON
 
 type LibraryAPI =
   GetLibrary :<|>
+  GetLibraryByName :<|>
   GetLibraries :<|>
   CreateLibrary :<|>
   UpdateLibrary :<|>
@@ -87,10 +88,13 @@ type LibraryRawFilesAPI =
 
 type Libraries = "libraries"
 type CaptureLibraryId = Capture "LibraryId" LibraryId
+type CaptureLibraryName = Capture "LibraryName" Text
 -- Unused right now but I'd like to use it instead of `Raw` later
 type CaptureFileStorageId = Capture "FileStorageId" FileStorageId
 
 type GetLibrary = Version :> Libraries :> CaptureLibraryId :> Get '[JSON] (Library LibraryId)
+type GetLibraryByName = Version :> Libraries :> CaptureLibraryName :>
+  Get '[JSON] (Library LibraryId)
 type GetLibraries = Version :> Libraries :> Get '[JSON] [Library LibraryId]
 type CreateLibrary = Version :> Libraries :> ReqBody '[JSON] (Library NoId) :>
   Post '[JSON] (Library LibraryId)
