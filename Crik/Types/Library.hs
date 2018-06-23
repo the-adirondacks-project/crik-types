@@ -22,27 +22,32 @@ import Crik.Types.Library.Id
 import Crik.Types.Video (VideoId)
 
 data Library id = Library {
-  libraryId :: id,
-  libraryUrl :: Text
+  libraryId :: id
+, libraryUrl :: Text
+, libraryName :: Text
 } deriving (Generic, Show)
 
 -- To JSON instances
 instance ToJSON (Library NoId) where
-  toJSON Library{..} = object ["url" .= libraryUrl]
-  toEncoding Library{..} = pairs ("url" .= libraryUrl)
+  toJSON Library{..} = object ["url" .= libraryUrl, "name" .= libraryName]
+  toEncoding Library{..} = pairs ("url" .= libraryUrl <> "name" .= libraryName)
 
 instance ToJSON (Library LibraryId) where
-  toJSON Library{..} = object ["id" .= libraryId, "url" .= libraryUrl]
-  toEncoding Library{..} = pairs ("id" .= libraryId <> "url" .= libraryUrl)
+  toJSON Library{..} = object ["id" .= libraryId, "url" .= libraryUrl, "name" .= libraryName]
+  toEncoding Library{..} = pairs ("id" .= libraryId <> "url" .= libraryUrl <> "name" .= libraryName)
 
 -- From JSON instances
 instance FromJSON (Library LibraryId) where
   parseJSON (Object v) = do
     id <- v .: "id"
     url <- v .: "url"
-    return (Library (LibraryId id) url)
+    name <- v .: "name"
+    return (Library (LibraryId id) url name)
   parseJSON invalid = typeMismatch "Library" invalid
 
 instance FromJSON (Library NoId) where
-  parseJSON (Object v) = Library NoId <$> v .: "url"
+  parseJSON (Object v) = do
+    url <- v .: "url"
+    name <- v .: "name"
+    return $ Library NoId url name
   parseJSON invalid = typeMismatch "Library" invalid
