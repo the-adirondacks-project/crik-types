@@ -45,6 +45,7 @@ type Version = "api"
 
 type VideoAPI =
   GetVideo :<|>
+  GetVideoByName :<|>
   GetVideos :<|>
   CreateVideo :<|>
   UpdateVideo :<|>
@@ -52,8 +53,10 @@ type VideoAPI =
 
 type Videos = "videos"
 type CaptureVideoId = Capture "videoId" VideoId
+type CaptureVideoName = Capture "videoName" Text
 
 type GetVideo = Version :> Videos :> CaptureVideoId :> Get '[JSON] (Video VideoId)
+type GetVideoByName = Version :> Videos :> CaptureVideoName :> Get '[JSON] (Video VideoId)
 type GetVideos = Version :> Videos :> Get '[JSON] [Video VideoId]
 type CreateVideo = Version :> Videos :> ReqBody '[JSON] (Video NoId) :> Post '[JSON] (Video VideoId)
 type UpdateVideo = Version :> Videos :> CaptureVideoId :> ReqBody '[JSON] (Video (Maybe VideoId))
